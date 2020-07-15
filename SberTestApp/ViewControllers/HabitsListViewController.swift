@@ -8,8 +8,17 @@
 
 import UIKit
 
-class HabitsListViewController: UIViewController {
+
+protocol HabitsListViewControllerDelegate: class {
+    func update(habit: Habit)
+}
+
+class HabitsListViewController: UIViewController, HabitsListViewControllerDelegate {
     
+    func update(habit: Habit) {
+        habits.append(habit)
+    }
+
     var habitsTableView = UITableView()
     var habits: [Habit] = []
     var navBar = UINavigationBar()
@@ -22,14 +31,16 @@ class HabitsListViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Pseudo's Habits"
-        getHabitsData()
-        setupHabitsTableView()
+        view.backgroundColor = UIColor.white
+        //getHabitsData()
+
         setupNavBar()
-        setupButton()
+        setupHabitsTableView()
+        
+        setupHabitsTableViewConstraints()
     }
     
     func setupHabitsTableView() {
-        
         view.addSubview(habitsTableView)
         // set delegates
         habitsTableView.delegate = self
@@ -37,43 +48,45 @@ class HabitsListViewController: UIViewController {
         // cell height
         // TODO DYNAMIC CELLS
         habitsTableView.rowHeight = 100
-        
         habitsTableView.register(HabitCell.self, forCellReuseIdentifier: CellConst.habitCell)
-        // set constraints
-        habitsTableView.pinEdges(to: view)
     }
     
-    func setupButton() {
-        addButton.setTitle("+", for: .normal)
-        addButton.frame = CGRect(x: 500, y: 100, width: 80, height: 80)
-        addButton.addTarget(self, action: #selector(buttonClicked(_ :)), for: .touchUpInside)
-        view.addSubview(addButton)
+    
+//    func setupNavigationBarConstaints() {
+//        navBar.translatesAutoresizingMaskIntoConstraints = false
+//        navBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+//    }
+    
+    func setupHabitsTableViewConstraints() {
+        habitsTableView.translatesAutoresizingMaskIntoConstraints = false
+        habitsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
+        habitsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        habitsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        habitsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
     }
     
-    @objc func buttonClicked(_ : UIButton) {
-        print("Button was tapped")
-    }
     
     func setupNavBar() {
-        view.addSubview(navBar)
-        let height: CGFloat = 80
+        let height: CGFloat = 50
         navBar = UINavigationBar(frame: CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: height))
+        view.addSubview(navBar)
         navBar.backgroundColor = UIColor.white
         navBar.delegate = self as? UINavigationBarDelegate
-        
-        let navItem = UINavigationItem()
-        //navItem.title = "Pseudo's Habits"
-        navItem.rightBarButtonItem = UIBarButtonItem(
-            title: "+",
-            style: .done,
+        //self.navigationItem.rightBarButtonItem
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+            barButtonSystemItem: .add,
             target: self,
             action: #selector(goToNextView)
         )
-        navBar.items = [navItem]
     }
     
     @objc func goToNextView() {
-        print("buttonPushed")
+        print("You TAP !")
+        
+        let destinationViewController = HabitViewController()
+        destinationViewController.modalPresentationStyle = .fullScreen
+        self.navigationController?.pushViewController(destinationViewController, animated: true)
+        
     }
     
     func getHabitsData() {

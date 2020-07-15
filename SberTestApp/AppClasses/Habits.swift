@@ -17,4 +17,8 @@ public class Habit {
         self.motivatingText = motivatingText
         self.habitType = habitType
     }
+    
+    func toString() -> String {
+        return "\(habitName), \(motivatingText), \(habitType)"
+    }
 }
