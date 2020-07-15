@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -23,6 +23,8 @@
 		648232D824BE1BC000AA7606 /* HabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232D724BE1BC000AA7606 /* HabitCell.swift */; };
 		648232DC24BE226B00AA7606 /* Habits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232DB24BE226B00AA7606 /* Habits.swift */; };
 		648232DE24BE229300AA7606 /* HabitsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232DD24BE229300AA7606 /* HabitsType.swift */; };
+		64BABF7B24BF8A1E00468E24 /* DateFormat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BABF7A24BF8A1E00468E24 /* DateFormat.swift */; };
+		64BABF7D24BF9DA600468E24 /* UserDataList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64BABF7C24BF9DA600468E24 /* UserDataList.swift */; };
 		885A7BB56826F82C4897F52B /* Pods_SberTestAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 433A37D2E49766C752C5AED2 /* Pods_SberTestAppTests.framework */; };
 		88BEEE9F338E3A2FF303866A /* Pods_SberTestApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57F54B541254FAC14BE97A47 /* Pods_SberTestApp.framework */; };
 /* End PBXBuildFile section */
@@ -70,6 +72,8 @@
 		648232D724BE1BC000AA7606 /* HabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCell.swift; sourceTree = "<group>"; };
 		648232DB24BE226B00AA7606 /* Habits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habits.swift; sourceTree = "<group>"; };
 		648232DD24BE229300AA7606 /* HabitsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsType.swift; sourceTree = "<group>"; };
+		64BABF7A24BF8A1E00468E24 /* DateFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormat.swift; sourceTree = "<group>"; };
+		64BABF7C24BF9DA600468E24 /* UserDataList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataList.swift; sourceTree = "<group>"; };
 		7D24D5548B81B0196E7217D0 /* Pods-SberTestAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SberTestAppTests.debug.xcconfig"; path = "Target Support Files/Pods-SberTestAppTests/Pods-SberTestAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A04EF138833ABC940F9CCFA6 /* Pods-SberTestApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SberTestApp.debug.xcconfig"; path = "Target Support Files/Pods-SberTestApp/Pods-SberTestApp.debug.xcconfig"; sourceTree = "<group>"; };
 		A49BC2AC7001F500F03E3C3C /* Pods-SberTestApp-SberTestAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SberTestApp-SberTestAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-SberTestApp-SberTestAppUITests/Pods-SberTestApp-SberTestAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 		6482329F24BDF0DF00AA7606 /* SberTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				64BABF7924BF8A0500468E24 /* Constants */,
 				648232DF24BE257700AA7606 /* Cell */,
 				648232DA24BE225600AA7606 /* AppClasses */,
 				648232D924BE222C00AA7606 /* ViewControllers */,
@@ -166,6 +171,7 @@
 		648232D924BE222C00AA7606 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				64BABF7C24BF9DA600468E24 /* UserDataList.swift */,
 				648232D324BE13E500AA7606 /* HabitsListViewController.swift */,
 				64047BB624BF27760031ECEB /* HabitViewController.swift */,
 				64047BB824BF5EAD0031ECEB /* HabitInfoViewController.swift */,
@@ -190,6 +196,14 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		64BABF7924BF8A0500468E24 /* Constants */ = {
+			isa = PBXGroup;
+			children = (
+				64BABF7A24BF8A1E00468E24 /* DateFormat.swift */,
+			);
+			path = Constants;
+			sourceTree = "<group>";
+		};
 		65A0661504134298F0B16DBC /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -210,7 +224,6 @@
 				7D24D5548B81B0196E7217D0 /* Pods-SberTestAppTests.debug.xcconfig */,
 				D9E9E448DFFB315618F8D68E /* Pods-SberTestAppTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -455,6 +468,7 @@
 			files = (
 				648232DE24BE229300AA7606 /* HabitsType.swift in Sources */,
 				648232D424BE13E500AA7606 /* HabitsListViewController.swift in Sources */,
+				64BABF7D24BF9DA600468E24 /* UserDataList.swift in Sources */,
 				648232D624BE163600AA7606 /* UIViewExtension.swift in Sources */,
 				64047BB924BF5EAD0031ECEB /* HabitInfoViewController.swift in Sources */,
 				648232D824BE1BC000AA7606 /* HabitCell.swift in Sources */,
@@ -462,6 +476,7 @@
 				648232A124BDF0DF00AA7606 /* AppDelegate.swift in Sources */,
 				648232A324BDF0DF00AA7606 /* SceneDelegate.swift in Sources */,
 				64047BB724BF27760031ECEB /* HabitViewController.swift in Sources */,
+				64BABF7B24BF8A1E00468E24 /* DateFormat.swift in Sources */,
 				648232DC24BE226B00AA7606 /* Habits.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

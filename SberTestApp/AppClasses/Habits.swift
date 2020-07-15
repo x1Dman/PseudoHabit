@@ -8,14 +8,33 @@
 
 import Foundation
 
-public class Habit {
+public class Habit: NSObject, NSCoding {
+    // for USERDATA
+    public func encode(with coder: NSCoder) {
+        coder.encode(habitName, forKey: "habitName")
+        coder.encode(motivatingText, forKey: "motivatingText")
+        coder.encode(habitType.rawValue, forKey: "habitType")
+        coder.encode(checkInDates, forKey: "dates")
+    }
+    
+    public required init?(coder: NSCoder) {
+        habitName = coder.decodeObject(forKey: "habitName") as? String ?? ""
+        motivatingText = coder.decodeObject(forKey: "motivatingText") as? String ?? ""
+        habitType = HabitsType(rawValue: coder.decodeObject(forKey: "habitType") as! String) ?? HabitsType.relaxing
+        checkInDates = coder.decodeObject(forKey: "dates") as? [String] ?? []
+        // = coder.decodeObject(forKey: "habitName") as? String ?? ""
+        
+    }
+    
     var habitType: HabitsType
     var motivatingText: String? = ""
     var habitName: String = ""
-    init(habitType: HabitsType, motivatingText: String?, habitName: String) {
+    var checkInDates: [String] = []
+    init(habitType: HabitsType, motivatingText: String?, habitName: String, dates: [String]) {
         self.habitName = habitName
         self.motivatingText = motivatingText
         self.habitType = habitType
+        self.checkInDates = dates
     }
     
     func toString() -> String {

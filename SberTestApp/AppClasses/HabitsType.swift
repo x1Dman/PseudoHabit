@@ -8,7 +8,7 @@
 
 import UIKit
 
-enum HabitsType {
+enum HabitsType: String {
     case relaxing
     case sporty
     case intelligently

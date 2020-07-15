@@ -29,8 +29,8 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
         super.viewDidLoad()
         title = "Pseudo's Habits"
         view.backgroundColor = UIColor.white
-        getHabitsData()
-
+        //getHabitsData()
+        habits = UserDataList.habits
         setupNavBar()
         setupHabitsTableView()
         
@@ -41,6 +41,15 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
         super.viewWillAppear(animated)
         // JESUS...
         habitsTableView.reloadData()
+        
+        for h in habits {
+            for dates in h.checkInDates {
+                print(dates)
+            }
+        }
+        
+        UserDataList.habits = self.habits
+        print(UserDataList.habits)
     }
     
     
@@ -87,7 +96,7 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
     }
     
     func didFinishSecondVC(controller: HabitViewController) {
-        self.habits.append(Habit(habitType: controller.habitType, motivatingText: controller.habitMotivationTextField.text, habitName: controller.habitNameTextField.text!))
+        self.habits.append(Habit(habitType: controller.habitType, motivatingText: controller.habitMotivationTextField.text, habitName: controller.habitNameTextField.text!, dates: []))
         controller.navigationController?.popViewController(animated: true)
     }
     
@@ -115,25 +124,34 @@ extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
 
         // move there!!!!!!
         
-        let habitInforVC = HabitInfoViewController()
+        let habitInfoVC = HabitInfoViewController()
         
-        habitInforVC.habitsName.text = habits[indexPath.row].habitName
-        habitInforVC.habitsMotivation.text = habits[indexPath.row].motivatingText
-        habitInforVC.viewColor = habits[indexPath.row].habitType.getColor()
+        // fix this 100%%%
+        habitInfoVC.habitsName.text = habits[indexPath.row].habitName
+        habitInfoVC.habitsMotivation.text = habits[indexPath.row].motivatingText
+        habitInfoVC.viewColor = habits[indexPath.row].habitType.getColor()
+        habitInfoVC.dates = habits[indexPath.row].checkInDates
+        habitInfoVC.habit = habits[indexPath.row]
         //Push Your controller if your view is already part of NavigationController stack
-        self.navigationController?.pushViewController(habitInforVC, animated: true)
+        self.navigationController?.pushViewController(habitInfoVC, animated: true)
+    }
+    
+    // DELETE DATA FROM SOURCE ARRAY
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        habits.remove(at: indexPath.row)
+        habitsTableView.deleteRows(at: [indexPath], with: .fade)
     }
 }
 
 
 extension HabitsListViewController {
     func generateData() -> [Habit] {
-        let h1 = Habit(habitType: .relaxing, motivatingText: "JUST DO IT!!!", habitName: "ChillZone")
-        let h2 = Habit(habitType: .sporty, motivatingText: "JUST DO IT!!!", habitName: "Swimming")
-        let h3 = Habit(habitType: .intelligently, motivatingText: "JUST DO IT!!!", habitName: "Chess")
-        let h4 = Habit(habitType: .healthy, motivatingText: "JUST DO IT!!!", habitName: "Sauna")
+        let h1 = Habit(habitType: .relaxing, motivatingText: "JUST DO IT!!!", habitName: "ChillZone", dates: ["07-10-2020", "07-13-2020"])
+        let h2 = Habit(habitType: .sporty, motivatingText: "JUST DO IT!!!", habitName: "Swimming", dates: ["07-13-2020"])
+//        let h3 = Habit(habitType: .intelligently, motivatingText: "JUST DO IT!!!", habitName: "Chess")
+//        let h4 = Habit(habitType: .healthy, motivatingText: "JUST DO IT!!!", habitName: "Sauna")
         
-        return [h1, h2, h3, h4]
+        return [h1, h2]
     }
 }
 

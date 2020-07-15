@@ -5,6 +5,7 @@
 //  Created by Никита Хуснутдинов on 7/15/20.
 //  Copyright © 2020 Никита Хуснутдинов. All rights reserved.
 //
+// Add a new Habit
 
 import UIKit
 
@@ -20,7 +21,7 @@ class HabitViewController: UIViewController {
     var habitTypeView = UIView()
     var habitMotivationTextField = UITextField()
     var acceptButton = UIButton()
-    var habit = Habit(habitType: .relaxing, motivatingText: "", habitName: "")
+    var habit = Habit(habitType: .relaxing, motivatingText: "", habitName: "", dates: [])
     var habitType: HabitsType = .relaxing
     var segmentTypeControl = UISegmentedControl()
     
@@ -106,7 +107,9 @@ class HabitViewController: UIViewController {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        habit = Habit(habitType: habitType, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!)
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MM-dd-YYYY"
+        habit = Habit(habitType: habitType, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!, dates: [])
     }
     
     // constraints
