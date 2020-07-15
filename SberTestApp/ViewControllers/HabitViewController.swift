@@ -81,12 +81,16 @@ class HabitViewController: UIViewController {
     @objc func segmentAction() {
         switch (segmentTypeControl.selectedSegmentIndex){
         case 0:
+            habitNameTextField.backgroundColor = .green
             habitType = .relaxing
         case 1:
+            habitNameTextField.backgroundColor = .red
             habitType = .sporty
         case 2:
+            habitNameTextField.backgroundColor = .blue
             habitType = .intelligently
         case 3:
+            habitNameTextField.backgroundColor = .yellow
             habitType = .healthy
         default:
             break

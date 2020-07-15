@@ -110,6 +110,19 @@ extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
         habitCell.set(habit: habit)        
         return habitCell
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        // move there!!!!!!
+        
+        let habitInforVC = HabitInfoViewController()
+        
+        habitInforVC.habitsName.text = habits[indexPath.row].habitName
+        habitInforVC.habitsMotivation.text = habits[indexPath.row].motivatingText
+        habitInforVC.viewColor = habits[indexPath.row].habitType.getColor()
+        //Push Your controller if your view is already part of NavigationController stack
+        self.navigationController?.pushViewController(habitInforVC, animated: true)
+    }
 }
 
 
