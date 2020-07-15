@@ -13,11 +13,8 @@ protocol HabitsListViewControllerDelegate: class {
     func update(habit: Habit)
 }
 
-class HabitsListViewController: UIViewController, HabitsListViewControllerDelegate {
+class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
     
-    func update(habit: Habit) {
-        habits.append(habit)
-    }
 
     var habitsTableView = UITableView()
     var habits: [Habit] = []
@@ -32,13 +29,20 @@ class HabitsListViewController: UIViewController, HabitsListViewControllerDelega
         super.viewDidLoad()
         title = "Pseudo's Habits"
         view.backgroundColor = UIColor.white
-        //getHabitsData()
+        getHabitsData()
 
         setupNavBar()
         setupHabitsTableView()
         
         setupHabitsTableViewConstraints()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // JESUS...
+        habitsTableView.reloadData()
+    }
+    
     
     func setupHabitsTableView() {
         view.addSubview(habitsTableView)
@@ -51,11 +55,6 @@ class HabitsListViewController: UIViewController, HabitsListViewControllerDelega
         habitsTableView.register(HabitCell.self, forCellReuseIdentifier: CellConst.habitCell)
     }
     
-    
-//    func setupNavigationBarConstaints() {
-//        navBar.translatesAutoresizingMaskIntoConstraints = false
-//        navBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
-//    }
     
     func setupHabitsTableViewConstraints() {
         habitsTableView.translatesAutoresizingMaskIntoConstraints = false
@@ -81,12 +80,15 @@ class HabitsListViewController: UIViewController, HabitsListViewControllerDelega
     }
     
     @objc func goToNextView() {
-        print("You TAP !")
-
         let destinationViewController = HabitViewController()
         destinationViewController.modalPresentationStyle = .fullScreen
+        destinationViewController.delegate = self
         self.navigationController?.pushViewController(destinationViewController, animated: true)
-        
+    }
+    
+    func didFinishSecondVC(controller: HabitViewController) {
+        self.habits.append(Habit(habitType: controller.habitType, motivatingText: controller.habitMotivationTextField.text, habitName: controller.habitNameTextField.text!))
+        controller.navigationController?.popViewController(animated: true)
     }
     
     func getHabitsData() {

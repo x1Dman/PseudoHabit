@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		64047BB724BF27760031ECEB /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64047BB624BF27760031ECEB /* HabitViewController.swift */; };
+		64047BB924BF5EAD0031ECEB /* HabitInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64047BB824BF5EAD0031ECEB /* HabitInfoViewController.swift */; };
 		648232A124BDF0DF00AA7606 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232A024BDF0DF00AA7606 /* AppDelegate.swift */; };
 		648232A324BDF0DF00AA7606 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232A224BDF0DF00AA7606 /* SceneDelegate.swift */; };
 		648232A824BDF0DF00AA7606 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 648232A624BDF0DF00AA7606 /* Main.storyboard */; };
@@ -42,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		64047BB624BF27760031ECEB /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
+		64047BB824BF5EAD0031ECEB /* HabitInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitInfoViewController.swift; sourceTree = "<group>"; };
 		6482329D24BDF0DF00AA7606 /* SberTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SberTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		648232A024BDF0DF00AA7606 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		648232A224BDF0DF00AA7606 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -149,6 +151,7 @@
 			children = (
 				648232D324BE13E500AA7606 /* HabitsListViewController.swift */,
 				64047BB624BF27760031ECEB /* HabitViewController.swift */,
+				64047BB824BF5EAD0031ECEB /* HabitInfoViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				648232DE24BE229300AA7606 /* HabitsType.swift in Sources */,
 				648232D424BE13E500AA7606 /* HabitsListViewController.swift in Sources */,
 				648232D624BE163600AA7606 /* UIViewExtension.swift in Sources */,
+				64047BB924BF5EAD0031ECEB /* HabitInfoViewController.swift in Sources */,
 				648232D824BE1BC000AA7606 /* HabitCell.swift in Sources */,
 				648232AB24BDF0DF00AA7606 /* SberTestApp.xcdatamodeld in Sources */,
 				648232A124BDF0DF00AA7606 /* AppDelegate.swift in Sources */,

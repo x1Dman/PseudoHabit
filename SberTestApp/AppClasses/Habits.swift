@@ -19,6 +19,6 @@ public class Habit {
     }
     
     func toString() -> String {
-        return "\(habitName), \(motivatingText), \(habitType)"
+        return "\(habitName), \(String(describing: motivatingText)), \(habitType)"
     }
 }

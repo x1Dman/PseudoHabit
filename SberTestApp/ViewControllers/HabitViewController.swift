@@ -8,6 +8,10 @@
 
 import UIKit
 
+protocol HabitsViewControllerDelegate: class {
+    func didFinishSecondVC(controller: HabitViewController)
+}
+
 class HabitViewController: UIViewController {
     
     weak var delegate: HabitsListViewController?
@@ -16,6 +20,9 @@ class HabitViewController: UIViewController {
     var habitTypeView = UIView()
     var habitMotivationTextField = UITextField()
     var acceptButton = UIButton()
+    var habit = Habit(habitType: .relaxing, motivatingText: "", habitName: "")
+    var habitType: HabitsType = .relaxing
+    var segmentTypeControl = UISegmentedControl()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +31,7 @@ class HabitViewController: UIViewController {
         
         setHabitNameTextField()
         setAcceptButton()
+        setSegmentedControl()
         setHabitTypeView()
         setHabitMotivationTextField()
         
@@ -31,8 +39,17 @@ class HabitViewController: UIViewController {
         setMotivationTextFieldConstaint()
         setTypeViewConstraints()
         setAcceptButtonConstraints()
+        setSegmentedControlConstraints()
     }
     
+    
+    func setSegmentedControl() {
+        segmentTypeControl = UISegmentedControl(items: ["Chill", "Sport", "Intelligence", "Health"])
+        segmentTypeControl.frame = CGRect(x: 20, y: 20, width: habitTypeView.frame.width, height: 30)
+        segmentTypeControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
+        segmentTypeControl.selectedSegmentIndex = 1
+        habitTypeView.addSubview(segmentTypeControl)
+    }
     
     func setAcceptButton() {
         acceptButton = UIButton(type: .roundedRect)
@@ -61,17 +78,31 @@ class HabitViewController: UIViewController {
         habitMotivationTextField.backgroundColor = .yellow
     }
     
-    @IBAction func changeDataInFirstVC() {
-        delegate?.update(habit: Habit(habitType: .relaxing, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!))
+    @objc func segmentAction() {
+        switch (segmentTypeControl.selectedSegmentIndex){
+        case 0:
+            habitType = .relaxing
+        case 1:
+            habitType = .sporty
+        case 2:
+            habitType = .intelligently
+        case 3:
+            habitType = .healthy
+        default:
+            break
+        }
     }
     
     @objc func acceptClicked() {
         print("tapped")
-        let sb = UIStoryboard(name: "Main", bundle: nil)
-        guard let sVC = sb.instantiateViewController(identifier: "HabitList") as? HabitsListViewController else { return }
-        sVC.habits.append(Habit(habitType: .relaxing, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!))
-        //show(sVC, sender: nil)
+        
         self.navigationController?.popViewController(animated: true)
+        delegate?.didFinishSecondVC(controller: self)
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        habit = Habit(habitType: habitType, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!)
     }
     
     // constraints
@@ -108,6 +139,13 @@ class HabitViewController: UIViewController {
         acceptButton.bottomAnchor.constraint(equalTo: habitTypeView.safeAreaLayoutGuide.bottomAnchor).isActive = true
         acceptButton.widthAnchor.constraint(equalTo: habitTypeView.widthAnchor).isActive = true
         acceptButton.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: 200).isActive = true
+    }
+    
+    func setSegmentedControlConstraints() {
+        segmentTypeControl.translatesAutoresizingMaskIntoConstraints = false
+        segmentTypeControl.bottomAnchor.constraint(lessThanOrEqualTo: acceptButton.topAnchor, constant: 20).isActive = true
+        segmentTypeControl.widthAnchor.constraint(equalTo: habitTypeView.widthAnchor).isActive = true
+        segmentTypeControl.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: 50).isActive = true
     }
 
 }
