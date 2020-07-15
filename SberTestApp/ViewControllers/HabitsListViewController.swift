@@ -12,6 +12,8 @@ class HabitsListViewController: UIViewController {
     
     var habitsTableView = UITableView()
     var habits: [Habit] = []
+    var navBar = UINavigationBar()
+    var addButton = UIButton(type: .roundedRect)
     
     struct CellConst {
         static let habitCell = "HabitCell"
@@ -22,9 +24,12 @@ class HabitsListViewController: UIViewController {
         title = "Pseudo's Habits"
         getHabitsData()
         setupHabitsTableView()
+        setupNavBar()
+        setupButton()
     }
     
     func setupHabitsTableView() {
+        
         view.addSubview(habitsTableView)
         // set delegates
         habitsTableView.delegate = self
@@ -34,8 +39,41 @@ class HabitsListViewController: UIViewController {
         habitsTableView.rowHeight = 100
         
         habitsTableView.register(HabitCell.self, forCellReuseIdentifier: CellConst.habitCell)
-        // set constaints
+        // set constraints
         habitsTableView.pinEdges(to: view)
+    }
+    
+    func setupButton() {
+        addButton.setTitle("+", for: .normal)
+        addButton.frame = CGRect(x: 500, y: 100, width: 80, height: 80)
+        addButton.addTarget(self, action: #selector(buttonClicked(_ :)), for: .touchUpInside)
+        view.addSubview(addButton)
+    }
+    
+    @objc func buttonClicked(_ : UIButton) {
+        print("Button was tapped")
+    }
+    
+    func setupNavBar() {
+        view.addSubview(navBar)
+        let height: CGFloat = 80
+        navBar = UINavigationBar(frame: CGRect(x: 0, y: height, width: UIScreen.main.bounds.width, height: height))
+        navBar.backgroundColor = UIColor.white
+        navBar.delegate = self as? UINavigationBarDelegate
+        
+        let navItem = UINavigationItem()
+        //navItem.title = "Pseudo's Habits"
+        navItem.rightBarButtonItem = UIBarButtonItem(
+            title: "+",
+            style: .done,
+            target: self,
+            action: #selector(goToNextView)
+        )
+        navBar.items = [navItem]
+    }
+    
+    @objc func goToNextView() {
+        print("buttonPushed")
     }
     
     func getHabitsData() {

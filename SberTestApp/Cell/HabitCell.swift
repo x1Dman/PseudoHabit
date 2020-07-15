@@ -11,7 +11,7 @@ import UIKit
 class HabitCell: UITableViewCell {
 
     var habitTitleLabel = UILabel()
-    var habitTypeView = DrawCircle()
+    var habitTypeView = UIView()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -73,6 +73,7 @@ class HabitCell: UITableViewCell {
     func setHabitTitleLabelConstaints(){
         habitTitleLabel.translatesAutoresizingMaskIntoConstraints                                             = false
         habitTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive                             = true
+        // ???? just why!?
         //habitTitleLabel.leadingAnchor.constraint(equalTo: habitTypeView.leadingAnchor, constant: 30).isActive = true
         habitTitleLabel.heightAnchor.constraint(equalToConstant: 80).isActive                                 = true
         habitTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive             = true
