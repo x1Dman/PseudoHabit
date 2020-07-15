@@ -82,7 +82,7 @@ class HabitsListViewController: UIViewController, HabitsListViewControllerDelega
     
     @objc func goToNextView() {
         print("You TAP !")
-        
+
         let destinationViewController = HabitViewController()
         destinationViewController.modalPresentationStyle = .fullScreen
         self.navigationController?.pushViewController(destinationViewController, animated: true)

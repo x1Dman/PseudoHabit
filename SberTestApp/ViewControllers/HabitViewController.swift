@@ -67,7 +67,10 @@ class HabitViewController: UIViewController {
     
     @objc func acceptClicked() {
         print("tapped")
-        changeDataInFirstVC()
+        let sb = UIStoryboard(name: "Main", bundle: nil)
+        guard let sVC = sb.instantiateViewController(identifier: "HabitList") as? HabitsListViewController else { return }
+        sVC.habits.append(Habit(habitType: .relaxing, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!))
+        //show(sVC, sender: nil)
         self.navigationController?.popViewController(animated: true)
     }
     
