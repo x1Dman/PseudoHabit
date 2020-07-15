@@ -26,4 +26,17 @@ enum HabitsType: String {
             return UIColor.green
         }
     }
+    
+    func getPriority() -> Int {
+        switch self {
+        case .healthy:
+            return 4
+        case .sporty:
+            return 3
+        case .intelligently:
+            return 2
+        case .relaxing:
+            return 1
+        }
+    }
 }

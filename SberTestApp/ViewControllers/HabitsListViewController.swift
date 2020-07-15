@@ -31,6 +31,9 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
         view.backgroundColor = UIColor.white
         //getHabitsData()
         habits = UserDataList.habits
+        habits.sort{(item1, item2) -> Bool in
+            return item1.habitType.getPriority() > item2.habitType.getPriority()
+        }
         setupNavBar()
         setupHabitsTableView()
         
@@ -40,13 +43,10 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // JESUS...
-        habitsTableView.reloadData()
-        
-        for h in habits {
-            for dates in h.checkInDates {
-                print(dates)
-            }
+        habits.sort{(item1, item2) -> Bool in
+            return item1.habitType.getPriority() > item2.habitType.getPriority()
         }
+        habitsTableView.reloadData()
         
         UserDataList.habits = self.habits
         print(UserDataList.habits)

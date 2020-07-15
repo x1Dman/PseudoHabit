@@ -134,6 +134,7 @@
 		6482329F24BDF0DF00AA7606 /* SberTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				64BABF8124BFA70700468E24 /* User Data */,
 				64BABF7924BF8A0500468E24 /* Constants */,
 				648232DF24BE257700AA7606 /* Cell */,
 				648232DA24BE225600AA7606 /* AppClasses */,
@@ -171,7 +172,6 @@
 		648232D924BE222C00AA7606 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
-				64BABF7C24BF9DA600468E24 /* UserDataList.swift */,
 				648232D324BE13E500AA7606 /* HabitsListViewController.swift */,
 				64047BB624BF27760031ECEB /* HabitViewController.swift */,
 				64047BB824BF5EAD0031ECEB /* HabitInfoViewController.swift */,
@@ -202,6 +202,14 @@
 				64BABF7A24BF8A1E00468E24 /* DateFormat.swift */,
 			);
 			path = Constants;
+			sourceTree = "<group>";
+		};
+		64BABF8124BFA70700468E24 /* User Data */ = {
+			isa = PBXGroup;
+			children = (
+				64BABF7C24BF9DA600468E24 /* UserDataList.swift */,
+			);
+			path = "User Data";
 			sourceTree = "<group>";
 		};
 		65A0661504134298F0B16DBC /* Frameworks */ = {
