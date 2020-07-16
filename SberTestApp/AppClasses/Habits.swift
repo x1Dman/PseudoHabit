@@ -30,11 +30,19 @@ public class Habit: NSObject, NSCoding {
     var motivatingText: String? = ""
     var habitName: String = ""
     var checkInDates: [String] = []
+    
     init(habitType: HabitsType, motivatingText: String?, habitName: String, dates: [String]) {
         self.habitName = habitName
         self.motivatingText = motivatingText
         self.habitType = habitType
         self.checkInDates = dates
+    }
+    
+    override init(){
+        self.habitName = "Name"
+        self.motivatingText = "DO IT!"
+        self.habitType = .sporty
+        self.checkInDates = []
     }
     
     func toString() -> String {

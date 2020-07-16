@@ -13,7 +13,7 @@ protocol HabitsViewControllerDelegate: class {
     func didFinishSecondVC(controller: HabitViewController)
 }
 
-class HabitViewController: UIViewController {
+class HabitViewController: UIViewController, UITextFieldDelegate {
     
     weak var delegate: HabitsListViewController?
     
@@ -21,7 +21,7 @@ class HabitViewController: UIViewController {
     var habitTypeView = UIView()
     var habitMotivationTextField = UITextField()
     var acceptButton = UIButton()
-    var habit = Habit(habitType: .relaxing, motivatingText: "", habitName: "", dates: [])
+    var habit = Habit()
     var habitType: HabitsType = .relaxing
     var segmentTypeControl = UISegmentedControl()
     
@@ -31,20 +31,20 @@ class HabitViewController: UIViewController {
         view.backgroundColor = UIColor.white
         
         setHabitNameTextField()
-        setAcceptButton()
-        setSegmentedControl()
-        setHabitTypeView()
         setHabitMotivationTextField()
+        setAcceptButton()
+        setSegmentControl()
+        setHabitTypeView()
         
         setNameTextFieldConstraints()
-        setMotivationTextFieldConstaint()
+        setMotivationTextFieldConstraints()
         setTypeViewConstraints()
         setAcceptButtonConstraints()
         setSegmentedControlConstraints()
     }
     
     
-    func setSegmentedControl() {
+    func setSegmentControl() {
         segmentTypeControl = UISegmentedControl(items: ["Chill", "Sport", "Intelligence", "Health"])
         segmentTypeControl.frame = CGRect(x: 20, y: 20, width: habitTypeView.frame.width, height: 30)
         segmentTypeControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
@@ -64,7 +64,6 @@ class HabitViewController: UIViewController {
         habitTypeView.backgroundColor = .blue
     }
     
-    
     func setHabitNameTextField() {
         view.addSubview(habitNameTextField)
         habitNameTextField.text = "Type there your hobby"
@@ -77,6 +76,9 @@ class HabitViewController: UIViewController {
     func setHabitMotivationTextField() {
         view.addSubview(habitMotivationTextField)
         habitMotivationTextField.backgroundColor = .yellow
+        habitMotivationTextField.text = "Here is motivation text"
+        habitMotivationTextField.textAlignment = .center
+        habitNameTextField.borderStyle = .roundedRect
     }
     
     @objc func segmentAction() {
@@ -99,16 +101,22 @@ class HabitViewController: UIViewController {
     }
     
     @objc func acceptClicked() {
-        print("tapped")
-        
         self.navigationController?.popViewController(animated: true)
         delegate?.didFinishSecondVC(controller: self)
     }
     
+//    func textFieldDidBeginEditing(_ textField: UITextField) {
+//        print("WOW")
+//    }
+//
+//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+//        textField.text = ""
+//        return true
+//    }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let formatter = DateFormatter()
-        formatter.dateFormat = "MM-dd-YYYY"
+        formatter.dateFormat = DateFormatConst.dateFormat
         habit = Habit(habitType: habitType, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!, dates: [])
     }
     
@@ -126,33 +134,41 @@ class HabitViewController: UIViewController {
         )
     }
     
-    func setMotivationTextFieldConstaint() {
+    func setMotivationTextFieldConstraints() {
         habitMotivationTextField.translatesAutoresizingMaskIntoConstraints = false
-        habitMotivationTextField.topAnchor.constraint(equalTo: habitNameTextField.bottomAnchor).isActive = true
-        habitMotivationTextField.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        habitMotivationTextField.bottomAnchor.constraint(equalTo: habitTypeView.topAnchor).isActive = true
-        habitMotivationTextField.heightAnchor.constraint(equalToConstant: 200).isActive = true
+        NSLayoutConstraint.activate([
+            habitMotivationTextField.topAnchor.constraint(equalTo: habitNameTextField.bottomAnchor),
+            habitMotivationTextField.widthAnchor.constraint(equalTo: view.widthAnchor),
+            habitMotivationTextField.bottomAnchor.constraint(equalTo: habitTypeView.topAnchor),
+            habitMotivationTextField.heightAnchor.constraint(equalToConstant: 200)
+        ])
     }
     
     func setTypeViewConstraints() {
         habitTypeView.translatesAutoresizingMaskIntoConstraints = false
-        habitTypeView.topAnchor.constraint(equalTo: habitMotivationTextField.bottomAnchor).isActive = true
-        habitTypeView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-        habitTypeView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            habitTypeView.topAnchor.constraint(equalTo: habitMotivationTextField.bottomAnchor),
+            habitTypeView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            habitTypeView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+        ])
     }
     
     func setAcceptButtonConstraints() {
         acceptButton.translatesAutoresizingMaskIntoConstraints = false
-        acceptButton.bottomAnchor.constraint(equalTo: habitTypeView.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        acceptButton.widthAnchor.constraint(equalTo: habitTypeView.widthAnchor).isActive = true
-        acceptButton.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: 200).isActive = true
+        NSLayoutConstraint.activate([
+            acceptButton.bottomAnchor.constraint(equalTo: habitTypeView.safeAreaLayoutGuide.bottomAnchor),
+            acceptButton.widthAnchor.constraint(equalTo: habitTypeView.widthAnchor),
+            acceptButton.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: 200)
+        ])
     }
     
     func setSegmentedControlConstraints() {
         segmentTypeControl.translatesAutoresizingMaskIntoConstraints = false
-        segmentTypeControl.bottomAnchor.constraint(lessThanOrEqualTo: acceptButton.topAnchor, constant: 20).isActive = true
-        segmentTypeControl.widthAnchor.constraint(equalTo: habitTypeView.widthAnchor).isActive = true
-        segmentTypeControl.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: 50).isActive = true
+        NSLayoutConstraint.activate([
+            segmentTypeControl.bottomAnchor.constraint(lessThanOrEqualTo: acceptButton.topAnchor, constant: 20),
+            segmentTypeControl.widthAnchor.constraint(equalTo: habitTypeView.widthAnchor),
+            segmentTypeControl.topAnchor.constraint(equalTo: habitTypeView.topAnchor, constant: 50)
+        ])
     }
-
+    
 }

@@ -10,6 +10,7 @@
 		3F38EEA16E9F9834BD017B5E /* Pods_SberTestApp_SberTestAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 620B58906D07446D98B9BD72 /* Pods_SberTestApp_SberTestAppUITests.framework */; };
 		64047BB724BF27760031ECEB /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64047BB624BF27760031ECEB /* HabitViewController.swift */; };
 		64047BB924BF5EAD0031ECEB /* HabitInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64047BB824BF5EAD0031ECEB /* HabitInfoViewController.swift */; };
+		640ABB9224C0464C00325FE2 /* Fonts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 640ABB9124C0464C00325FE2 /* Fonts.swift */; };
 		648232A124BDF0DF00AA7606 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232A024BDF0DF00AA7606 /* AppDelegate.swift */; };
 		648232A324BDF0DF00AA7606 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232A224BDF0DF00AA7606 /* SceneDelegate.swift */; };
 		648232A824BDF0DF00AA7606 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 648232A624BDF0DF00AA7606 /* Main.storyboard */; };
@@ -19,7 +20,6 @@
 		648232BB24BDF0E200AA7606 /* SberTestAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232BA24BDF0E200AA7606 /* SberTestAppTests.swift */; };
 		648232C624BDF0E200AA7606 /* SberTestAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232C524BDF0E200AA7606 /* SberTestAppUITests.swift */; };
 		648232D424BE13E500AA7606 /* HabitsListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232D324BE13E500AA7606 /* HabitsListViewController.swift */; };
-		648232D624BE163600AA7606 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232D524BE163600AA7606 /* UIViewExtension.swift */; };
 		648232D824BE1BC000AA7606 /* HabitCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232D724BE1BC000AA7606 /* HabitCell.swift */; };
 		648232DC24BE226B00AA7606 /* Habits.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232DB24BE226B00AA7606 /* Habits.swift */; };
 		648232DE24BE229300AA7606 /* HabitsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 648232DD24BE229300AA7606 /* HabitsType.swift */; };
@@ -53,6 +53,7 @@
 		620B58906D07446D98B9BD72 /* Pods_SberTestApp_SberTestAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SberTestApp_SberTestAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		64047BB624BF27760031ECEB /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
 		64047BB824BF5EAD0031ECEB /* HabitInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitInfoViewController.swift; sourceTree = "<group>"; };
+		640ABB9124C0464C00325FE2 /* Fonts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Fonts.swift; sourceTree = "<group>"; };
 		6482329D24BDF0DF00AA7606 /* SberTestApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SberTestApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		648232A024BDF0DF00AA7606 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		648232A224BDF0DF00AA7606 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -68,7 +69,6 @@
 		648232C524BDF0E200AA7606 /* SberTestAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SberTestAppUITests.swift; sourceTree = "<group>"; };
 		648232C724BDF0E200AA7606 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		648232D324BE13E500AA7606 /* HabitsListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsListViewController.swift; sourceTree = "<group>"; };
-		648232D524BE163600AA7606 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		648232D724BE1BC000AA7606 /* HabitCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCell.swift; sourceTree = "<group>"; };
 		648232DB24BE226B00AA7606 /* Habits.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Habits.swift; sourceTree = "<group>"; };
 		648232DD24BE229300AA7606 /* HabitsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsType.swift; sourceTree = "<group>"; };
@@ -146,7 +146,6 @@
 				648232AE24BDF0E100AA7606 /* LaunchScreen.storyboard */,
 				648232B124BDF0E100AA7606 /* Info.plist */,
 				648232A924BDF0DF00AA7606 /* SberTestApp.xcdatamodeld */,
-				648232D524BE163600AA7606 /* UIViewExtension.swift */,
 			);
 			path = SberTestApp;
 			sourceTree = "<group>";
@@ -200,6 +199,7 @@
 			isa = PBXGroup;
 			children = (
 				64BABF7A24BF8A1E00468E24 /* DateFormat.swift */,
+				640ABB9124C0464C00325FE2 /* Fonts.swift */,
 			);
 			path = Constants;
 			sourceTree = "<group>";
@@ -476,8 +476,8 @@
 			files = (
 				648232DE24BE229300AA7606 /* HabitsType.swift in Sources */,
 				648232D424BE13E500AA7606 /* HabitsListViewController.swift in Sources */,
+				640ABB9224C0464C00325FE2 /* Fonts.swift in Sources */,
 				64BABF7D24BF9DA600468E24 /* UserDataList.swift in Sources */,
-				648232D624BE163600AA7606 /* UIViewExtension.swift in Sources */,
 				64047BB924BF5EAD0031ECEB /* HabitInfoViewController.swift in Sources */,
 				648232D824BE1BC000AA7606 /* HabitCell.swift in Sources */,
 				648232AB24BDF0DF00AA7606 /* SberTestApp.xcdatamodeld in Sources */,

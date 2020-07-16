@@ -9,35 +9,42 @@
 import UIKit
 
 
-protocol HabitsListViewControllerDelegate: class {
-    func update(habit: Habit)
-}
-
-class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
+class HabitsListViewController: UIViewController {
     
-
-    var habitsTableView = UITableView()
-    var habits: [Habit] = []
-    var navBar = UINavigationBar()
-    var addButton = UIButton(type: .roundedRect)
+    
+    struct AppTitle {
+        static let name = "Pseudo's Habits"
+    }
     
     struct CellConst {
         static let habitCell = "HabitCell"
     }
     
+    var habitsTableView = UITableView()
+    var habits: [Habit] = []
+    var navBar = UINavigationBar()
+    var addButton = UIButton(type: .roundedRect)
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Pseudo's Habits"
+        title = AppTitle.name
         view.backgroundColor = UIColor.white
+        
         //getHabitsData()
-        habits = UserDataList.habits
-        habits.sort{(item1, item2) -> Bool in
-            return item1.habitType.getPriority() > item2.habitType.getPriority()
-        }
+        prepareHabitsDataForUsage()
+        
         setupNavBar()
         setupHabitsTableView()
         
-        setupHabitsTableViewConstraints()
+        setHabitsTableViewConstraints()
+    }
+    
+    func prepareHabitsDataForUsage() {
+        habits = UserDataList.habits
+        habits.sort{
+            (item1, item2) -> Bool in
+            return item1.habitType.getPriority() > item2.habitType.getPriority()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -49,30 +56,7 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
         habitsTableView.reloadData()
         
         UserDataList.habits = self.habits
-        print(UserDataList.habits)
     }
-    
-    
-    func setupHabitsTableView() {
-        view.addSubview(habitsTableView)
-        // set delegates
-        habitsTableView.delegate = self
-        habitsTableView.dataSource = self
-        // cell height
-        // TODO DYNAMIC CELLS
-        habitsTableView.rowHeight = 100
-        habitsTableView.register(HabitCell.self, forCellReuseIdentifier: CellConst.habitCell)
-    }
-    
-    
-    func setupHabitsTableViewConstraints() {
-        habitsTableView.translatesAutoresizingMaskIntoConstraints = false
-        habitsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10).isActive = true
-        habitsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        habitsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        habitsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-    }
-    
     
     func setupNavBar() {
         let height: CGFloat = 50
@@ -80,7 +64,6 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
         view.addSubview(navBar)
         navBar.backgroundColor = UIColor.white
         navBar.delegate = self as? UINavigationBarDelegate
-        //self.navigationItem.rightBarButtonItem
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
@@ -95,6 +78,7 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
         self.navigationController?.pushViewController(destinationViewController, animated: true)
     }
     
+    // getting data from habitViewController
     func didFinishSecondVC(controller: HabitViewController) {
         self.habits.append(Habit(habitType: controller.habitType, motivatingText: controller.habitMotivationTextField.text, habitName: controller.habitNameTextField.text!, dates: []))
         controller.navigationController?.popViewController(animated: true)
@@ -104,8 +88,29 @@ class HabitsListViewController: UIViewController, HabitsViewControllerDelegate {
         habits = generateData()
     }
     
+    func setupHabitsTableView() {
+        view.addSubview(habitsTableView)
+        // set delegates
+        habitsTableView.delegate = self
+        habitsTableView.dataSource = self
+        // cell height
+        // TODO DYNAMIC CELLS
+        habitsTableView.rowHeight = 100
+        habitsTableView.register(HabitCell.self, forCellReuseIdentifier: CellConst.habitCell)
+    }
+    
+    
+    func setHabitsTableViewConstraints() {
+        habitsTableView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            habitsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            habitsTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            habitsTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            habitsTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+    }
+    
 }
-
 
 
 extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
@@ -121,18 +126,11 @@ extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
+        
         // move there!!!!!!
         
         let habitInfoVC = HabitInfoViewController()
-        
-        // fix this 100%%%
-        habitInfoVC.habitsName.text = habits[indexPath.row].habitName
-        habitInfoVC.habitsMotivation.text = habits[indexPath.row].motivatingText
-        habitInfoVC.viewColor = habits[indexPath.row].habitType.getColor()
-        habitInfoVC.dates = habits[indexPath.row].checkInDates
         habitInfoVC.habit = habits[indexPath.row]
-        //Push Your controller if your view is already part of NavigationController stack
         self.navigationController?.pushViewController(habitInfoVC, animated: true)
     }
     
@@ -140,6 +138,7 @@ extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         habits.remove(at: indexPath.row)
         habitsTableView.deleteRows(at: [indexPath], with: .fade)
+        UserDataList.habits = self.habits
     }
 }
 
@@ -148,9 +147,6 @@ extension HabitsListViewController {
     func generateData() -> [Habit] {
         let h1 = Habit(habitType: .relaxing, motivatingText: "JUST DO IT!!!", habitName: "ChillZone", dates: ["07-10-2020", "07-13-2020"])
         let h2 = Habit(habitType: .sporty, motivatingText: "JUST DO IT!!!", habitName: "Swimming", dates: ["07-13-2020"])
-//        let h3 = Habit(habitType: .intelligently, motivatingText: "JUST DO IT!!!", habitName: "Chess")
-//        let h4 = Habit(habitType: .healthy, motivatingText: "JUST DO IT!!!", habitName: "Sauna")
-        
         return [h1, h2]
     }
 }
