@@ -11,8 +11,13 @@ import UIKit
 
 class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarDelegateAppearance {
     
-    var habit = Habit()
+    // consts
+    enum Constants {
+        static let acceptButton = "Accept Habit"
+    }
+    
     // only for habit
+    var habit = HabitDB()
     var habitInfoView = UIView()
     var viewColor = UIColor()
     var habitsMotivation = UITextView()
@@ -23,10 +28,14 @@ class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarD
     // calendar
     var calendar = FSCalendar()
     
+    // dateFormatter
+    let dateFormatter = ObjCDateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = .white
+        dateFormatter.setFormat(DateFormatConst.dateFormat)
         setupViewData()
         setupTextView()
         setupCalendar()
@@ -37,10 +46,10 @@ class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarD
     }
     
     func setupViewData() {
-        habitsName.text = habit.habitName
-        habitsMotivation.text = habit.motivatingText
-        viewColor = habit.habitType.getColor()
-        dates = habit.checkInDates
+        habitsName.text = habit.habitNameDB
+        habitsMotivation.text = habit.habitsMotivationDB
+        viewColor = HabitsType.getType(fromPriority: habit.habitTypeDB).color
+        dates = habit.datesDB ?? []
     }
     
     func setupTextView() {
@@ -52,18 +61,6 @@ class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarD
         habitsMotivation.textAlignment = .center
         habitsMotivation.font = UIFont(name: Fonts.motivationHabitFont, size: 20)
         
-        // почему-то это так и не заработало...
-        //habitInfoView.addSubview(habitsMotivation)
-        //habitInfoView.addSubview(habitsName)
-        //view.addSubview(habitInfoView)
-        //        acceptHabitButton.setTitle("Done Habit", for: .normal)
-        //        acceptHabitButton.tintColor = .black
-        //        acceptHabitButton.frame = CGRect(
-        //            x: habitsMotivation.frame.size.width/2 - acceptHabitButton.frame.size.width/2,
-        //            y: habitsMotivation.frame.size.height/2 - acceptHabitButton.frame.size.height/2,
-        //            width: acceptHabitButton.frame.size.width,
-        //            height: acceptHabitButton.frame.size.height
-        //        )
         setupAcceptButton()
         view.addSubview(habitsMotivation)
         view.addSubview(habitsName)
@@ -74,7 +71,7 @@ class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarD
         acceptHabitButton = UIButton(type: .roundedRect)
         acceptHabitButton.frame.size.width = 200
         acceptHabitButton.frame.size.height = 50
-        acceptHabitButton.setTitle("Accept Habit", for: .normal)
+        acceptHabitButton.setTitle(Constants.acceptButton, for: .normal)
         acceptHabitButton.addTarget(self, action: #selector(acceptClicked), for: .touchUpInside)
         acceptHabitButton.center.x = view.frame.midX
         acceptHabitButton.center.y = view.frame.midY + 100
@@ -82,18 +79,22 @@ class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarD
     
     @objc func acceptClicked() {
         let habitListVC = HabitsListViewController()
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatConst.dateFormat
-        let curDate = Date()
-        dates.append(formatter.string(from: curDate))
-        habit.checkInDates = dates
-        // update dates
-        for h in habitListVC.habits {
-            if h.habitName == habit.habitName {
-                h.checkInDates = dates
+        let currentDate = Date()
+        guard let acceptedDate = dateFormatter.getDateString(from: currentDate) else { return }
+        
+        // adding a new date
+        dates.append(acceptedDate)
+        habit.datesDB = dates
+        
+        // update dates in main habit array
+        for habit in habitListVC.habits {
+            if habit.habitNameDB == habit.habitNameDB {
+                habit.datesDB = dates
             }
         }
-        self.navigationController?.popViewController(animated: true)
+        
+        CoreDataHabitsManager.instance.updateHabit(habit: habit)
+        navigationController?.popViewController(animated: true)
     }
     
     func setupCalendar() {
@@ -132,7 +133,6 @@ class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarD
     
     func setCalendarConstraints() {
         calendar.translatesAutoresizingMaskIntoConstraints = false
-        
         NSLayoutConstraint.activate([
             calendar.topAnchor.constraint(equalTo: habitsMotivation.bottomAnchor),
             calendar.widthAnchor.constraint(equalTo: view.widthAnchor),
@@ -141,23 +141,18 @@ class HabitInfoViewController: UIViewController, FSCalendarDelegate, FSCalendarD
     }
     
     func calendar(_ calendar: FSCalendar, willDisplay cell: FSCalendarCell, for date: Date, at monthPosition: FSCalendarMonthPosition) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatConst.dateFormat
-        let curDate = Date()
-        if formatter.string(from: date) == formatter.string(from: curDate) {
-            // trash...
-            cell.shapeLayer.backgroundColor = viewColor.withAlphaComponent(0.5).cgColor
-        }
+        let currentDate = Date()
+        
+        // myCustomFormatter
+        guard let currentDayString = dateFormatter.getDateString(from: date),
+            let cellDayString = dateFormatter.getDateString(from: currentDate), currentDayString == cellDayString else { return }
+        cell.shapeLayer.backgroundColor = viewColor.withAlphaComponent(0.5).cgColor
     }
-    
     
     func calendar(_ calendar: FSCalendar, appearance: FSCalendarAppearance, fillDefaultColorFor date: Date) -> UIColor? {
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatConst.dateFormat
-        if dates.contains(formatter.string(from: date)) {
-            return UIColor.purple
+        guard let cellDay = dateFormatter.getDateString(from: date), dates.contains(cellDay) else {
+            return UIColor.clear
         }
-        return UIColor.clear
+        return UIColor.purple
     }
-    
 }

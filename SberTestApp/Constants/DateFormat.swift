@@ -8,6 +8,6 @@
 
 import Foundation
 
-struct DateFormatConst {
+enum DateFormatConst {
     static let dateFormat = "MM-dd-YYYY"
 }

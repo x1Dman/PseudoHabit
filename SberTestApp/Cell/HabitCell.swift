@@ -9,9 +9,10 @@
 import UIKit
 
 class HabitCell: UITableViewCell {
-
+    
     var habitTitleLabel = UILabel()
     var habitTypeView = UIView()
+    
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -29,27 +30,20 @@ class HabitCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func set(habit: Habit){
+    func set(habit: HabitDB){
+        // drawing circle
         let shapeLayer = CAShapeLayer()
         var path = UIBezierPath()
         var color = UIColor()
         path = UIBezierPath(ovalIn: CGRect(x: 15, y: 15, width: 40, height: 40))
         shapeLayer.path = path.cgPath
-        switch habit.habitType {
-            case .relaxing:
-                color = UIColor.green
-            case .sporty:
-                color = UIColor.red
-            case .intelligently:
-                color = UIColor.blue
-            case .healthy:
-                color = UIColor.yellow
-        }
+        let habitType = HabitsType.getType(fromPriority: habit.habitTypeDB)
+        color = habitType.color
         shapeLayer.fillColor = color.cgColor
         shapeLayer.strokeColor = color.cgColor
         shapeLayer.lineWidth = 2.0
         habitTypeView.layer.addSublayer(shapeLayer)
-        habitTitleLabel.text = habit.habitName
+        habitTitleLabel.text = habit.habitNameDB
     }
     
     func setupHabitTitleLabel() {
@@ -71,12 +65,10 @@ class HabitCell: UITableViewCell {
     }
     
     func setHabitTitleLabelConstaints(){
-        habitTitleLabel.translatesAutoresizingMaskIntoConstraints                                             = false
-        habitTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive                             = true
-        // ???? just why!?
-        //habitTitleLabel.leadingAnchor.constraint(equalTo: habitTypeView.leadingAnchor, constant: 30).isActive = true
-        habitTitleLabel.heightAnchor.constraint(equalToConstant: 80).isActive                                 = true
-        habitTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive             = true
+        habitTitleLabel.translatesAutoresizingMaskIntoConstraints                                           = false
+        habitTitleLabel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive                           = true
+        habitTitleLabel.heightAnchor.constraint(equalToConstant: 80).isActive                               = true
+        habitTitleLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -8).isActive           = true
     }
     
     
@@ -84,11 +76,11 @@ class HabitCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
     }
-
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
-
+    
 }

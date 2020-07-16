@@ -8,35 +8,42 @@
 
 import UIKit
 
-enum HabitsType: String {
+
+enum HabitsType: Int {
     case relaxing
-    case sporty
     case intelligently
+    case sporty
     case healthy
+    case nonType
     
-    func getColor() -> UIColor {
+    var color: UIColor {
         switch self {
-        case .healthy:
-            return UIColor.yellow
-        case .sporty:
-            return UIColor.red
-        case .intelligently:
-            return UIColor.blue
-        case .relaxing:
-            return UIColor.green
+            case .healthy:
+                return UIColor.yellow
+            case .sporty:
+                return UIColor.red
+            case .intelligently:
+                return UIColor.blue
+            case .relaxing:
+                return UIColor.green
+            case .nonType:
+                return UIColor.black
         }
     }
     
-    func getPriority() -> Int {
-        switch self {
-        case .healthy:
-            return 4
-        case .sporty:
-            return 3
-        case .intelligently:
-            return 2
-        case .relaxing:
-            return 1
+    static func getType(fromPriority value: Int16) -> HabitsType {
+        switch value {
+            case 0:
+                return .relaxing
+            case 1:
+                return .intelligently
+            case 2:
+                return .sporty
+            case 3:
+                return .healthy
+            default:
+                return .sporty
         }
     }
+    
 }

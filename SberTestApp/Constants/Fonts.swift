@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Fonts {
+enum Fonts {
     static let titleHabitFont = "Arial-BoldItalicMT"
     static let motivationHabitFont = "Arial-BoldItalicMT"
 }
