@@ -11,51 +11,49 @@ import UIKit
 
 class HabitsListViewController: UIViewController {
     
-    
-    struct AppTitle {
-        static let name = "Pseudo's Habits"
-    }
-    
-    struct CellConst {
+    private enum Constants {
+        static let appTitle = "Pseudo's Habits"
         static let habitCell = "HabitCell"
     }
     
     var habitsTableView = UITableView()
-    var habits: [Habit] = []
+    var habits: [HabitDB] = []
     var navBar = UINavigationBar()
     var addButton = UIButton(type: .roundedRect)
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = AppTitle.name
+        title = Constants.appTitle
         view.backgroundColor = UIColor.white
         
-        //getHabitsData()
         prepareHabitsDataForUsage()
-        
         setupNavBar()
         setupHabitsTableView()
         
         setHabitsTableViewConstraints()
     }
     
-    func prepareHabitsDataForUsage() {
-        habits = UserDataList.habits
-        habits.sort{
-            (item1, item2) -> Bool in
-            return item1.habitType.getPriority() > item2.habitType.getPriority()
+    func updateHabitsOrder() {
+        habits.sort {
+            (habit1, habit2) -> Bool in
+            return habit1.habitTypeDB > habit2.habitTypeDB
         }
+    }
+    
+    func prepareHabitsDataForUsage() {
+        habits = fillArrayFromDB()
+        updateHabitsOrder()
+    }
+    
+    func fillArrayFromDB() -> [HabitDB] {
+        guard let habitDB = CoreDataHabitsManager.instance.fetchHabits() else { return [] }
+        return habitDB
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // JESUS...
-        habits.sort{(item1, item2) -> Bool in
-            return item1.habitType.getPriority() > item2.habitType.getPriority()
-        }
+        updateHabitsOrder()
         habitsTableView.reloadData()
-        
-        UserDataList.habits = self.habits
     }
     
     func setupNavBar() {
@@ -64,7 +62,7 @@ class HabitsListViewController: UIViewController {
         view.addSubview(navBar)
         navBar.backgroundColor = UIColor.white
         navBar.delegate = self as? UINavigationBarDelegate
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
             barButtonSystemItem: .add,
             target: self,
             action: #selector(goToNextView)
@@ -75,17 +73,40 @@ class HabitsListViewController: UIViewController {
         let destinationViewController = HabitViewController()
         destinationViewController.modalPresentationStyle = .fullScreen
         destinationViewController.delegate = self
-        self.navigationController?.pushViewController(destinationViewController, animated: true)
+        navigationController?.pushViewController(destinationViewController, animated: true)
     }
     
-    // getting data from habitViewController
-    func didFinishSecondVC(controller: HabitViewController) {
-        self.habits.append(Habit(habitType: controller.habitType, motivatingText: controller.habitMotivationTextField.text, habitName: controller.habitNameTextField.text!, dates: []))
+    func addNewHabitInList(habit: HabitDB) {
+        habits.append(habit)
+    }
+    
+    func addedNewHabitInList(controller: HabitViewController) {
+        guard let habitName = controller.habitNameTextField.text else {
+            return
+        }
+        // added new habbit
+        if habits.contains(where: {$0.habitNameDB == habitName}) {
+            return
+        }
+        let habitType = controller.habitType
+        let motivationText = controller.habitMotivationTextField.text
+        let dates: [String] = []
+        let habitModel = HabitModel(
+            name: habitName,
+            type: Int16(habitType.rawValue),
+            motivation: motivationText,
+            dates: dates
+        )
+        // Mark: Added to DB and list
+        guard let habit = CoreDataHabitsManager.instance.createHabit(
+            withHabitModel: habitModel
+            ) else {
+                controller.navigationController?.popViewController(animated: true)
+                return
+        }
+        // means that habit was added into DB and we can easily add it to list
+        addNewHabitInList(habit: habit)
         controller.navigationController?.popViewController(animated: true)
-    }
-    
-    func getHabitsData() {
-        habits = generateData()
     }
     
     func setupHabitsTableView() {
@@ -96,7 +117,7 @@ class HabitsListViewController: UIViewController {
         // cell height
         // TODO DYNAMIC CELLS
         habitsTableView.rowHeight = 100
-        habitsTableView.register(HabitCell.self, forCellReuseIdentifier: CellConst.habitCell)
+        habitsTableView.register(HabitCell.self, forCellReuseIdentifier: Constants.habitCell)
     }
     
     
@@ -119,35 +140,38 @@ extension HabitsListViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let habitCell = tableView.dequeueReusableCell(withIdentifier: CellConst.habitCell) as! HabitCell
+        guard let habitCell = tableView.dequeueReusableCell(withIdentifier: Constants.habitCell) as? HabitCell else { return UITableViewCell() }
         let habit = habits[indexPath.row]
-        habitCell.set(habit: habit)        
+        habitCell.set(habit: habit)
         return habitCell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        // move there!!!!!!
-        
         let habitInfoVC = HabitInfoViewController()
         habitInfoVC.habit = habits[indexPath.row]
-        self.navigationController?.pushViewController(habitInfoVC, animated: true)
+        navigationController?.pushViewController(habitInfoVC, animated: true)
     }
     
     // DELETE DATA FROM SOURCE ARRAY
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        // delete phase
+        let habit = habits[indexPath.row]
         habits.remove(at: indexPath.row)
         habitsTableView.deleteRows(at: [indexPath], with: .fade)
-        UserDataList.habits = self.habits
+        CoreDataHabitsManager.instance.deleteHabit(habit: habit)
     }
 }
 
 
 extension HabitsListViewController {
-    func generateData() -> [Habit] {
-        let h1 = Habit(habitType: .relaxing, motivatingText: "JUST DO IT!!!", habitName: "ChillZone", dates: ["07-10-2020", "07-13-2020"])
-        let h2 = Habit(habitType: .sporty, motivatingText: "JUST DO IT!!!", habitName: "Swimming", dates: ["07-13-2020"])
-        return [h1, h2]
+    func generateDataWithCoreData() {
+        let habitModel1 = HabitModel(
+            name: "Dance",
+            type: Int16(HabitsType.getType(fromPriority: 2).rawValue),
+            motivation: "Just dance",
+            dates: ["07-30-2020"]
+        )
+        guard let _ = CoreDataHabitsManager.instance.createHabit(withHabitModel: habitModel1) else { return }
     }
 }
 

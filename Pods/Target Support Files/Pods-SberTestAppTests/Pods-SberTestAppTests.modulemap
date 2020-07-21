@@ -1,6 +1,0 @@
-framework module Pods_SberTestAppTests {
-  umbrella header "Pods-SberTestAppTests-umbrella.h"
-
-  export *
-  module * { export * }
-}

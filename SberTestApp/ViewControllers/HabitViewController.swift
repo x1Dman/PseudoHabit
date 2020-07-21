@@ -10,19 +10,28 @@
 import UIKit
 
 protocol HabitsViewControllerDelegate: class {
-    func didFinishSecondVC(controller: HabitViewController)
+    func addedNewHabitInList(controller: HabitViewController)
 }
 
 class HabitViewController: UIViewController, UITextFieldDelegate {
     
     weak var delegate: HabitsListViewController?
     
+    // consts
+    private enum Constants {
+        static let acceptButtonText = "Accept"
+        static let initHabitNameText = "Type there your hobby"
+        static let initHabitMotivationText = "Here is motivation text"
+        static let initHabitTypeValue: HabitsType = .sporty
+        static let segmentItems = ["Chill", "Sport", "Intelligence", "Health"]
+    }
+    
+    //var habit: HabitDB!
     var habitNameTextField = UITextField()
     var habitTypeView = UIView()
     var habitMotivationTextField = UITextField()
     var acceptButton = UIButton()
-    var habit = Habit()
-    var habitType: HabitsType = .relaxing
+    var habitType: HabitsType = Constants.initHabitTypeValue
     var segmentTypeControl = UISegmentedControl()
     
     override func viewDidLoad() {
@@ -45,7 +54,7 @@ class HabitViewController: UIViewController, UITextFieldDelegate {
     
     
     func setSegmentControl() {
-        segmentTypeControl = UISegmentedControl(items: ["Chill", "Sport", "Intelligence", "Health"])
+        segmentTypeControl = UISegmentedControl(items: Constants.segmentItems)
         segmentTypeControl.frame = CGRect(x: 20, y: 20, width: habitTypeView.frame.width, height: 30)
         segmentTypeControl.addTarget(self, action: #selector(segmentAction), for: .valueChanged)
         segmentTypeControl.selectedSegmentIndex = 1
@@ -54,7 +63,7 @@ class HabitViewController: UIViewController, UITextFieldDelegate {
     
     func setAcceptButton() {
         acceptButton = UIButton(type: .roundedRect)
-        acceptButton.setTitle("Accept", for: .normal)
+        acceptButton.setTitle(Constants.acceptButtonText, for: .normal)
         acceptButton.addTarget(self, action: #selector(acceptClicked), for: .touchUpInside)
         habitTypeView.addSubview(acceptButton)
     }
@@ -66,7 +75,7 @@ class HabitViewController: UIViewController, UITextFieldDelegate {
     
     func setHabitNameTextField() {
         view.addSubview(habitNameTextField)
-        habitNameTextField.text = "Type there your hobby"
+        habitNameTextField.text = Constants.initHabitNameText
         habitNameTextField.textAlignment = .center
         habitNameTextField.layer.borderColor = UIColor.black.cgColor
         habitNameTextField.borderStyle = .roundedRect
@@ -76,7 +85,7 @@ class HabitViewController: UIViewController, UITextFieldDelegate {
     func setHabitMotivationTextField() {
         view.addSubview(habitMotivationTextField)
         habitMotivationTextField.backgroundColor = .yellow
-        habitMotivationTextField.text = "Here is motivation text"
+        habitMotivationTextField.text = Constants.initHabitMotivationText
         habitMotivationTextField.textAlignment = .center
         habitNameTextField.borderStyle = .roundedRect
     }
@@ -101,24 +110,11 @@ class HabitViewController: UIViewController, UITextFieldDelegate {
     }
     
     @objc func acceptClicked() {
-        self.navigationController?.popViewController(animated: true)
-        delegate?.didFinishSecondVC(controller: self)
+        //getHabitDBFrom()
+        navigationController?.popViewController(animated: true)
+        delegate?.addedNewHabitInList(controller: self)
     }
     
-//    func textFieldDidBeginEditing(_ textField: UITextField) {
-//        print("WOW")
-//    }
-//
-//    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-//        textField.text = ""
-//        return true
-//    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = DateFormatConst.dateFormat
-        habit = Habit(habitType: habitType, motivatingText: habitMotivationTextField.text, habitName: habitNameTextField.text!, dates: [])
-    }
     
     // constraints
     func setNameTextFieldConstraints () {
